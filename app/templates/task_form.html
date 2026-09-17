@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Add Task - Team Efficiency Measure{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/tasks">My Tasks</a></li>
+        <li class="breadcrumb-item active" aria-current="page" id="form-breadcrumb">Add Task</li>
+    </ol>
+</nav>
+
+<h1 class="h3 mb-3" id="form-heading">Add Task</h1>
+
+<div id="form-alert"></div>
+<div id="no-user-banner" class="alert alert-info d-none">
+    Select your employee profile from the dropdown in the top right before creating or editing tasks.
+</div>
+
+<form id="task-form" class="needs-validation d-none" novalidate>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label for="field-project" class="form-label">Project *</label>
+            <select id="field-project" class="form-select" required>
+                <option value="" selected disabled>Select a project…</option>
+            </select>
+            <div class="invalid-feedback">Please select a project.</div>
+        </div>
+        <div class="col-md-6">
+            <label for="field-priority" class="form-label">Priority</label>
+            <select id="field-priority" class="form-select">
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+                <option value="urgent">Urgent</option>
+            </select>
+        </div>
+
+        <div class="col-12">
+            <label for="field-title" class="form-label">Title *</label>
+            <input type="text" id="field-title" class="form-control" maxlength="255" required>
+            <div class="invalid-feedback">Please enter a task title.</div>
+        </div>
+
+        <div class="col-12">
+            <label for="field-description" class="form-label">Description</label>
+            <textarea id="field-description" class="form-control" rows="3"></textarea>
+        </div>
+
+        <div class="col-md-4">
+            <label for="field-status" class="form-label">Status</label>
+            <select id="field-status" class="form-select">
+                <option value="not_started">Not Started</option>
+                <option value="in_progress">In Progress</option>
+                <option value="blocked">Blocked</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="field-estimated-hours" class="form-label">Estimated Hours</label>
+            <input type="number" id="field-estimated-hours" class="form-control" min="0" step="0.25">
+            <div class="invalid-feedback">Estimated hours cannot be negative.</div>
+        </div>
+        <div class="col-md-4">
+            <label for="field-actual-hours" class="form-label">Actual Hours</label>
+            <input type="number" id="field-actual-hours" class="form-control" min="0" step="0.25">
+            <div class="invalid-feedback">Actual hours cannot be negative.</div>
+        </div>
+
+        <div class="col-md-4">
+            <label for="field-start-date" class="form-label">Start Date</label>
+            <input type="date" id="field-start-date" class="form-control">
+        </div>
+        <div class="col-md-4">
+            <label for="field-deadline" class="form-label">Deadline</label>
+            <input type="date" id="field-deadline" class="form-control">
+            <div class="invalid-feedback">Deadline must be on or after the start date.</div>
+        </div>
+        <div class="col-md-4">
+            <label for="field-completed-date" class="form-label">Completed Date</label>
+            <input type="date" id="field-completed-date" class="form-control">
+        </div>
+
+        <div class="col-md-6">
+            <label for="field-quality-score" class="form-label">Quality Score (0-100)</label>
+            <input type="number" id="field-quality-score" class="form-control" min="0" max="100" step="1">
+            <div class="invalid-feedback">Quality score must be between 0 and 100.</div>
+        </div>
+        <div class="col-md-6">
+            <label for="field-delay-reason" class="form-label">Delay Reason</label>
+            <input type="text" id="field-delay-reason" class="form-control" placeholder="Optional — why is this task delayed?">
+        </div>
+    </div>
+
+    <div class="mt-4 d-flex gap-2">
+        <button type="submit" class="btn btn-primary" id="submit-btn">Save Task</button>
+        <a href="/tasks" class="btn btn-outline-secondary">Cancel</a>
+    </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/task_form.js"></script>
+{% endblock %}

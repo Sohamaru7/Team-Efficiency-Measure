@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}AI Assistant - Team Efficiency Measure{% endblock %}
+
+{% block content %}
+<div class="mb-3">
+    <h1 class="mb-0">Manager AI Assistant</h1>
+    <p class="text-muted mb-0">
+        Ask a question in plain English. The assistant answers only by calling read-only
+        analytics tools — it never invents a number and cannot change any data.
+    </p>
+</div>
+
+<div id="assistant-alert"></div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <form id="ask-form">
+            <label for="question-input" class="form-label">Your question</label>
+            <textarea id="question-input" class="form-control" rows="2" maxlength="2000"
+                      placeholder="e.g. Who is overloaded right now?" required></textarea>
+            <div class="d-flex justify-content-between align-items-center mt-2">
+                <div class="d-flex flex-wrap gap-2" id="suggested-questions">
+                    <!-- populated by JS -->
+                </div>
+                <button type="submit" class="btn btn-primary" id="ask-button">Ask</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="conversation"></div>
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>Pending agent actions</span>
+        <button type="button" class="btn btn-sm btn-outline-secondary" id="refresh-actions-btn">Refresh</button>
+    </div>
+    <div class="card-body">
+        <p class="text-muted small mb-3">
+            The agent can act on its own for reminders and reports. Any task creation, update,
+            reassignment, or priority change it proposes waits here until a manager approves or
+            rejects it — it has no effect until then.
+        </p>
+        <div id="pending-actions"></div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">Recent agent activity</div>
+    <div class="card-body">
+        <div id="action-log"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/ai_assistant.js"></script>
+{% endblock %}

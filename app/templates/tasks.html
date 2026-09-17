@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}My Tasks - Team Efficiency Measure{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <h1 class="mb-0">My Tasks</h1>
+    <a href="/tasks/new" class="btn btn-primary">+ Add New Task</a>
+</div>
+
+<div id="tasks-alert"></div>
+<div id="no-user-banner" class="alert alert-info d-none">
+    Select your employee profile from the dropdown in the top right to see your tasks.
+</div>
+
+<div id="tasks-panel" class="d-none">
+    <div class="row g-2 mb-3">
+        <div class="col-auto">
+            <select id="filter-status" class="form-select form-select-sm">
+                <option value="">All statuses</option>
+                <option value="not_started">Not Started</option>
+                <option value="in_progress">In Progress</option>
+                <option value="blocked">Blocked</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <select id="filter-project" class="form-select form-select-sm">
+                <option value="">All projects</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle bg-white">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Project</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Deadline</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="tasks-tbody">
+                <tr><td colspan="6" class="text-center text-muted">Loading…</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/tasks.js"></script>
+{% endblock %}

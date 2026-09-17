@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Daily Manager Report - Team Efficiency Measure{% endblock %}
+
+{% block content %}
+<div class="mb-3">
+    <h1 class="mb-0">Autonomous Daily Manager</h1>
+    <p class="text-muted mb-0">
+        Runs once per working day: collects updates, detects issues, and only alerts on what's
+        new or changed — quiet on repeated, unchanged issues. Only low-risk or approval-gated
+        actions are ever taken automatically; see "Actions Taken" below.
+    </p>
+</div>
+
+<div id="daily-report-alert"></div>
+
+<div class="card mb-4">
+    <div class="card-body d-flex flex-wrap gap-2 align-items-end">
+        <div>
+            <label for="run-date-input" class="form-label small mb-1">Date</label>
+            <input type="date" id="run-date-input" class="form-control form-control-sm">
+        </div>
+        <button type="button" class="btn btn-primary btn-sm" id="run-now-btn">Run Now</button>
+        <button type="button" class="btn btn-outline-secondary btn-sm" id="load-latest-btn">Load Latest Report</button>
+    </div>
+</div>
+
+<div id="report-section" class="d-none">
+    <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+        <h4 class="mb-0" id="report-date-heading"></h4>
+        <div>
+            <span class="badge bg-secondary" id="team-efficiency-badge"></span>
+            <span class="badge" id="action-required-badge"></span>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-3">
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">Major Changes</div>
+                <div class="card-body" id="section-major-changes"></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">Recommended Actions</div>
+                <div class="card-body" id="section-recommended-actions"></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">Actions Already Taken</div>
+                <div class="card-body" id="section-actions-taken"></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">Completed Work</div>
+                <div class="card-body" id="section-completed-work"></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">Delayed Work</div>
+                <div class="card-body" id="section-delayed-work"></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">At-Risk Deadlines</div>
+                <div class="card-body" id="section-at-risk"></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">Workload Problems</div>
+                <div class="card-body" id="section-workload"></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">Quality Issues</div>
+                <div class="card-body" id="section-quality"></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">Project Risks</div>
+                <div class="card-body" id="section-project-risks"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>Report History</span>
+        <button type="button" class="btn btn-sm btn-outline-secondary" id="refresh-history-btn">Refresh</button>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-sm table-hover align-middle mb-0">
+                <thead><tr><th>Date</th><th>Team Efficiency</th><th>Action Required</th><th>Actions Taken</th></tr></thead>
+                <tbody id="history-rows"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/daily_report.js"></script>
+{% endblock %}

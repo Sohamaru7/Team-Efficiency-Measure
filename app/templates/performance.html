@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}My Performance - Team Efficiency Measure{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-1">My Performance</h1>
+<p class="text-muted">Historical performance scores, once calculated, will appear here.</p>
+
+<div id="perf-alert"></div>
+<div id="no-user-banner" class="alert alert-info d-none">
+    Select your employee profile from the dropdown in the top right to see your performance history.
+</div>
+
+<div id="performance-panel" class="d-none">
+    <div class="table-responsive">
+        <table class="table table-hover bg-white">
+            <thead>
+                <tr>
+                    <th>Period</th>
+                    <th>Completion</th>
+                    <th>Timeliness</th>
+                    <th>Quality</th>
+                    <th>Time Efficiency</th>
+                    <th>Workload</th>
+                    <th>Overall</th>
+                </tr>
+            </thead>
+            <tbody id="performance-tbody">
+                <tr><td colspan="7" class="text-center text-muted">Loading…</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/performance.js"></script>
+{% endblock %}

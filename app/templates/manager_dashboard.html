@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+
+{% block title %}Manager Dashboard - Team Efficiency Measure{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <div>
+        <h1 class="mb-0">Manager Dashboard</h1>
+        <p class="text-muted mb-0">Team efficiency, workload, and risk — computed entirely on the server.</p>
+    </div>
+</div>
+
+<div id="dashboard-alert"></div>
+
+<!-- Filters -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form id="filter-form" class="row g-3 align-items-end">
+            <div class="col-6 col-md-2">
+                <label for="filter-date-from" class="form-label small mb-1">Date from</label>
+                <input type="date" id="filter-date-from" class="form-control form-control-sm">
+            </div>
+            <div class="col-6 col-md-2">
+                <label for="filter-date-to" class="form-label small mb-1">Date to</label>
+                <input type="date" id="filter-date-to" class="form-control form-control-sm">
+            </div>
+            <div class="col-6 col-md-2">
+                <label for="filter-employee" class="form-label small mb-1">Employee</label>
+                <select id="filter-employee" class="form-select form-select-sm">
+                    <option value="">All employees</option>
+                </select>
+            </div>
+            <div class="col-6 col-md-2">
+                <label for="filter-department" class="form-label small mb-1">Department</label>
+                <select id="filter-department" class="form-select form-select-sm">
+                    <option value="">All departments</option>
+                </select>
+            </div>
+            <div class="col-6 col-md-2">
+                <label for="filter-project" class="form-label small mb-1">Project</label>
+                <select id="filter-project" class="form-select form-select-sm">
+                    <option value="">All projects</option>
+                </select>
+            </div>
+            <div class="col-6 col-md-2">
+                <label for="filter-status" class="form-label small mb-1">Task status</label>
+                <select id="filter-status" class="form-select form-select-sm">
+                    <option value="">All statuses</option>
+                    <option value="not_started">Not Started</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="blocked">Blocked</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
+            <div class="col-12 d-flex gap-2">
+                <button type="submit" class="btn btn-primary btn-sm">Apply Filters</button>
+                <button type="button" id="reset-filters-btn" class="btn btn-outline-secondary btn-sm">Reset</button>
+                <span class="text-muted small align-self-center" id="filter-hint">
+                    Date range filters "due in window" for overdue/at-risk, and "completed in window" for completion stats.
+                </span>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="dashboard-loading" class="text-center text-muted py-4">Loading dashboard…</div>
+
+<div id="dashboard-content" class="d-none">
+    <!-- KPI summary tiles -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <div class="fs-3 fw-bold" id="kpi-team-efficiency">—</div>
+                    <div class="text-muted small">Overall Team Efficiency</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card text-center h-100 border-success">
+                <div class="card-body">
+                    <div class="fs-3 fw-bold text-success" id="kpi-tasks-completed">—</div>
+                    <div class="text-muted small">Tasks Completed</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card text-center h-100 border-danger">
+                <div class="card-body">
+                    <div class="fs-3 fw-bold text-danger" id="kpi-tasks-overdue">—</div>
+                    <div class="text-muted small">Tasks Overdue</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card text-center h-100 border-warning">
+                <div class="card-body">
+                    <div class="fs-3 fw-bold text-warning-emphasis" id="kpi-tasks-at-risk">—</div>
+                    <div class="text-muted small">Tasks At Risk</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <div class="fs-3 fw-bold" id="kpi-avg-completion">—</div>
+                    <div class="text-muted small">Avg Completion Time</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <div class="fs-3 fw-bold" id="kpi-on-time-rate">—</div>
+                    <div class="text-muted small">On-Time Completion Rate</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <div class="fs-3 fw-bold" id="kpi-team-workload">—</div>
+                    <div class="text-muted small">Team Workload</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <div class="fs-3 fw-bold" id="kpi-team-size">—</div>
+                    <div class="text-muted small">Team Size</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Efficiency trend -->
+    <div class="card mb-4">
+        <div class="card-header">Efficiency Trend <span class="text-muted small">(from submitted daily updates)</span></div>
+        <div class="card-body">
+            <div id="trend-empty-state" class="text-muted text-center py-3 d-none">
+                No daily updates were submitted in this date range.
+            </div>
+            <canvas id="chart-efficiency-trend" height="80"></canvas>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <!-- Workload distribution -->
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-header">Workload Distribution</div>
+                <div class="card-body">
+                    <canvas id="chart-workload" height="180"></canvas>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-sm mb-0">
+                        <thead><tr><th>Employee</th><th>Active Hours</th><th>Utilization</th><th>Open Tasks</th></tr></thead>
+                        <tbody id="workload-tbody"><tr><td colspan="4" class="text-center text-muted">Loading…</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project progress -->
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-header">Project Progress</div>
+                <div class="card-body">
+                    <canvas id="chart-project-progress" height="180"></canvas>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-sm mb-0">
+                        <thead><tr><th>Project</th><th>Progress</th><th>Completed</th><th>Total</th></tr></thead>
+                        <tbody id="project-progress-tbody"><tr><td colspan="4" class="text-center text-muted">Loading…</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Employee performance -->
+    <div class="card mb-4">
+        <div class="card-header">Employee Performance</div>
+        <div class="table-responsive">
+            <table class="table table-sm table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Employee</th>
+                        <th>Overall</th>
+                        <th>Completion</th>
+                        <th>On-Time</th>
+                        <th>Quality</th>
+                        <th>Time Efficiency</th>
+                        <th>Deadline Adherence</th>
+                        <th>Project Progress</th>
+                        <th>Workload</th>
+                    </tr>
+                </thead>
+                <tbody id="employee-performance-tbody">
+                    <tr><td colspan="9" class="text-center text-muted">Loading…</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Delayed tasks -->
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-header">Delayed Tasks</div>
+                <div class="table-responsive">
+                    <table class="table table-sm mb-0">
+                        <thead><tr><th>Task</th><th>Assignee</th><th>Deadline</th><th>Days Late</th></tr></thead>
+                        <tbody id="delayed-tasks-tbody"><tr><td colspan="4" class="text-center text-muted">Loading…</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming deadlines -->
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-header">Upcoming Deadlines</div>
+                <div class="table-responsive">
+                    <table class="table table-sm mb-0">
+                        <thead><tr><th>Task</th><th>Assignee</th><th>Deadline</th><th>Days Left</th></tr></thead>
+                        <tbody id="upcoming-deadlines-tbody"><tr><td colspan="4" class="text-center text-muted">Loading…</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="/static/js/manager_dashboard.js"></script>
+{% endblock %}

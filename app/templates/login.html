@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Log In - Team Efficiency Measure{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <h1 class="h3 mb-3">Log In</h1>
+        <div id="login-alert"></div>
+        <form id="login-form" class="card card-body">
+            <div class="mb-3">
+                <label for="email-input" class="form-label">Email</label>
+                <input type="email" id="email-input" class="form-control" required autocomplete="username">
+            </div>
+            <div class="mb-3">
+                <label for="password-input" class="form-label">Password</label>
+                <input type="password" id="password-input" class="form-control" required autocomplete="current-password">
+            </div>
+            <button type="submit" class="btn btn-primary" id="login-btn">Log In</button>
+        </form>
+
+        <div id="demo-mode-section" class="d-none mt-4">
+            <hr>
+            <p class="text-muted small mb-2">
+                This instance is running in demo mode — skip the login and explore the full
+                system with nothing blocked, no account needed.
+            </p>
+            <button type="button" class="btn btn-primary btn-sm mb-2" data-demo-role="admin">Enter Demo (full access)</button>
+            <p class="text-muted small mb-1">Or see what a specific role experiences:</p>
+            <div class="d-flex gap-2 flex-wrap">
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-demo-role="manager">Enter as Manager</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-demo-role="employee">Enter as Employee</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/login.js"></script>
+{% endblock %}

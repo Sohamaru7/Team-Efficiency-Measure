@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Import / Export - Team Efficiency Measure{% endblock %}
+
+{% block content %}
+<div class="mb-3">
+    <h1 class="mb-0">Data Import / Export</h1>
+    <p class="text-muted mb-0">
+        Import tasks from a CSV/Excel file, or export the task list and manager reports.
+        Nothing is written to the database until you review a preview and click Commit.
+    </p>
+</div>
+
+<div id="import-alert"></div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <label for="import-file-input" class="form-label">CSV or Excel (.xlsx) file</label>
+        <div class="d-flex gap-2 flex-wrap">
+            <input type="file" id="import-file-input" class="form-control" accept=".csv,.xlsx" style="max-width: 400px;">
+            <button type="button" class="btn btn-outline-primary" id="preview-btn">Preview</button>
+            <button type="button" class="btn btn-success" id="commit-btn" disabled>Commit Import</button>
+        </div>
+        <p class="text-muted small mt-2 mb-0">
+            Expected columns (any reasonable header spelling is auto-mapped): Employee, Task,
+            Project, Priority, Estimated Hours, Actual Hours, Start Date, Deadline, Status,
+            Quality, Delay Reason. Employee/Project must match existing names exactly — unknown
+            names are rejected, never auto-created.
+        </p>
+    </div>
+</div>
+
+<div id="preview-section" class="d-none">
+    <div class="card mb-4">
+        <div class="card-header">Preview</div>
+        <div class="card-body">
+            <div id="preview-summary" class="mb-3"></div>
+            <div id="preview-mapping" class="mb-3 small text-muted"></div>
+            <div class="table-responsive">
+                <table class="table table-sm table-hover align-middle mb-0">
+                    <thead><tr><th>Row</th><th>Status</th><th>Employee</th><th>Task</th><th>Project</th><th>Errors</th></tr></thead>
+                    <tbody id="preview-rows"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>Import history</span>
+        <button type="button" class="btn btn-sm btn-outline-secondary" id="refresh-history-btn">Refresh</button>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-sm align-middle mb-0">
+                <thead><tr><th>When</th><th>File</th><th>Processed</th><th>Accepted</th><th>Rejected</th></tr></thead>
+                <tbody id="history-rows"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">Export</div>
+    <div class="card-body">
+        <h6>Task list</h6>
+        <p class="text-muted small">All tasks, in the same columns the importer understands.</p>
+        <div class="d-flex gap-2 mb-3">
+            <button type="button" class="btn btn-outline-secondary btn-sm" data-export="/export/tasks?format=csv" data-filename="tasks.csv">Export CSV</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" data-export="/export/tasks?format=xlsx" data-filename="tasks.xlsx">Export Excel</button>
+        </div>
+        <h6>Manager dashboard report</h6>
+        <p class="text-muted small">Summary KPIs, employee performance, workload, project progress, delayed tasks, and upcoming deadlines.</p>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-secondary btn-sm" data-export="/export/dashboard?format=csv" data-filename="manager_dashboard.csv">Export CSV</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" data-export="/export/dashboard?format=xlsx" data-filename="manager_dashboard.xlsx">Export Excel</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/import_export.js"></script>
+{% endblock %}

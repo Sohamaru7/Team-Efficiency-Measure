@@ -1,0 +1,21 @@
+# Environment
+.env
+venv/
+.venv/
+
+# Demo mode (scripts/run_demo.py) — a disposable, regenerated-on-every-run SQLite file
+demo.db
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

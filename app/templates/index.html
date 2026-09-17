@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Team Efficiency Measure{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-3">Dashboard</h1>
+        <p class="text-muted">Overview of your tasks and system status.</p>
+    </div>
+</div>
+
+<div id="dashboard-alert"></div>
+
+<div class="row mt-2">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Application Status</h5>
+                <p class="card-text" id="app-status">Checking...</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Database Status</h5>
+                <p class="card-text" id="db-status">Checking...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <div id="no-user-banner" class="alert alert-info d-none">
+        Select your employee profile from the dropdown in the top right to see your task summary.
+    </div>
+
+    <div id="task-summary-section" class="d-none">
+        <div class="row g-3">
+            <div class="col-6 col-md-3">
+                <div class="card text-center border-secondary">
+                    <div class="card-body">
+                        <div class="fs-3 fw-bold" id="count-not-started">0</div>
+                        <div class="text-muted small">Not Started</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card text-center border-primary">
+                    <div class="card-body">
+                        <div class="fs-3 fw-bold text-primary" id="count-in-progress">0</div>
+                        <div class="text-muted small">In Progress</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card text-center border-danger">
+                    <div class="card-body">
+                        <div class="fs-3 fw-bold text-danger" id="count-blocked">0</div>
+                        <div class="text-muted small">Blocked</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card text-center border-success">
+                    <div class="card-body">
+                        <div class="fs-3 fw-bold text-success" id="count-completed">0</div>
+                        <div class="text-muted small">Completed</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4 g-3">
+            <div class="col-md-7">
+                <div class="card">
+                    <div class="card-header">Upcoming Deadlines (next 7 days)</div>
+                    <ul class="list-group list-group-flush" id="upcoming-deadlines">
+                        <li class="list-group-item text-muted">Loading…</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="card">
+                    <div class="card-header">Quick Actions</div>
+                    <div class="card-body d-grid gap-2">
+                        <a href="/tasks/new" class="btn btn-primary">+ Add New Task</a>
+                        <a href="/tasks" class="btn btn-outline-secondary">View My Tasks</a>
+                        <a href="/daily-update" class="btn btn-outline-secondary">Submit Daily Update</a>
+                        <a href="/performance" class="btn btn-outline-secondary">View My Performance</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/main.js"></script>
+<script src="/static/js/dashboard.js"></script>
+{% endblock %}

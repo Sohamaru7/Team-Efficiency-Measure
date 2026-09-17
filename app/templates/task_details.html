@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Task Details - Team Efficiency Measure{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/tasks">My Tasks</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Task Details</li>
+    </ol>
+</nav>
+
+<div id="task-details-alert"></div>
+
+<div id="task-details-panel" class="d-none">
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                <div>
+                    <h1 class="h3 mb-1" id="task-title"></h1>
+                    <div id="task-badges" class="mb-2"></div>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="#" id="edit-link" class="btn btn-outline-primary">Edit</a>
+                    <button id="delete-btn" class="btn btn-outline-danger">Delete</button>
+                </div>
+            </div>
+            <p id="task-description" class="text-muted"></p>
+            <hr>
+            <dl class="row mb-0">
+                <dt class="col-sm-3">Project</dt><dd class="col-sm-9" id="task-project">—</dd>
+                <dt class="col-sm-3">Estimated Hours</dt><dd class="col-sm-9" id="task-estimated-hours">—</dd>
+                <dt class="col-sm-3">Actual Hours</dt><dd class="col-sm-9" id="task-actual-hours">—</dd>
+                <dt class="col-sm-3">Start Date</dt><dd class="col-sm-9" id="task-start-date">—</dd>
+                <dt class="col-sm-3">Deadline</dt><dd class="col-sm-9" id="task-deadline">—</dd>
+                <dt class="col-sm-3">Completed Date</dt><dd class="col-sm-9" id="task-completed-date">—</dd>
+                <dt class="col-sm-3">Quality Score</dt><dd class="col-sm-9" id="task-quality-score">—</dd>
+                <dt class="col-sm-3">Delay Reason</dt><dd class="col-sm-9" id="task-delay-reason">—</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-header">Related Emails</div>
+        <div class="card-body">
+            <p class="text-muted small mb-2">
+                Emails are shown for context only — email activity is never treated as
+                productivity or fed into any performance score.
+            </p>
+            <div id="email-delay-classification" class="mb-3"></div>
+            <div id="email-list"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/task_details.js"></script>
+{% endblock %}
